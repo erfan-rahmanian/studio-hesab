@@ -16,12 +16,22 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import type { Transaction } from '@/types';
+import { toWesternNumerals } from '@/lib/utils';
 
 const transactionFormSchema = z.object({
   title: z.string().min(1, { message: 'عنوان نمی‌تواند خالی باشد.' }),
   amount: z.preprocess(
-    (val) => (typeof val === 'string' ? parseFloat(val.replace(/,/g, '')) : val),
-    z.number({ invalid_type_error: 'مبلغ باید عدد باشد.' }).positive({ message: 'مبلغ باید مثبت باشد.' })
+    (val) => {
+      if (typeof val === 'string') {
+        // This string should already be cleaned by onChange to be parsable by parseFloat
+        // e.g., "1234.56" or "1234"
+        const cleanedVal = val.replace(/,/g, ''); // Remove any remaining standard commas if any (should be none from our onChange)
+        return parseFloat(cleanedVal);
+      }
+      return val;
+    },
+    z.number({ invalid_type_error: 'مبلغ باید عدد باشد.', required_error: 'مبلغ نمی‌تواند خالی باشد.' })
+     .positive({ message: 'مبلغ باید مثبت باشد.' })
   ),
 });
 
@@ -42,9 +52,24 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
     },
   });
 
+  // Sync initialData to form when it changes (e.g., when opening dialog for editing)
+  React.useEffect(() => {
+    if (initialData) {
+      form.reset({
+        title: initialData.title || '',
+        amount: initialData.amount || undefined,
+      });
+    } else {
+      form.reset({
+        title: '',
+        amount: undefined,
+      });
+    }
+  }, [initialData, form]);
+
   const handleSubmit = (data: TransactionFormData) => {
     onSubmit(data);
-    form.reset();
+    form.reset({ title: '', amount: undefined }); // Reset form after submission
   };
 
   return (
@@ -70,24 +95,46 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
             <FormItem>
               <FormLabel>مبلغ</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="مثال: ۵۰۰۰۰۰" {...field} onChange={(e) => {
-                  const value = e.target.value.replace(/,/g, '');
-                  if (!isNaN(Number(value)) || value === '') {
-                     // Format with commas for display, but field.onChange expects the raw value or string that can be parsed
-                    field.onChange(value === '' ? '' : Number(value).toLocaleString('fa-IR').replace(/\./g, ','));
+                <Input
+                  type="text"
+                  placeholder="مثال: ۵۰۰۰۰۰"
+                  {...field}
+                  onChange={(e) => {
+                    let inputValue = e.target.value;
+                    inputValue = toWesternNumerals(inputValue);
+
+                    const cleanedValueForParsing = inputValue
+                      .replace(/[٬,]/g, '')    // Remove Farsi and English thousand separators
+                      .replace(/[٫\/]/g, '.'); // Convert Farsi decimal separators (٫ or /) to standard period .
+                    
+                    // Allow only digits and a single decimal point for the cleaned value
+                    if (/^\d*\.?\d*$/.test(cleanedValueForParsing) || cleanedValueForParsing === '') {
+                         field.onChange(cleanedValueForParsing === '' ? '' : cleanedValueForParsing);
+                    } else {
+                        // If input is invalid after cleaning (e.g. "1.2.3"), revert to previous valid field value
+                        // to prevent invalid characters from being set in the form state directly.
+                        // This still allows Zod to catch it if somehow an invalid value is submitted.
+                        // Or, simply don't call field.onChange if the cleanedValue is not numeric-like.
+                        // For simplicity, we'll let field.onChange pass the current `cleanedValueForParsing`
+                        // and Zod will handle more complex validation.
+                        // This current implementation will pass potentially invalid strings to Zod,
+                        // for example "1.2.3" or "abc". Zod will then mark it as an error.
+                         field.onChange(cleanedValueForParsing);
+                    }
+                  }}
+                  value={
+                    (() => {
+                      const formValue = field.value;
+                      if (typeof formValue === 'number') {
+                        return formValue.toLocaleString('fa-IR', { maximumFractionDigits: 10, useGrouping: true });
+                      }
+                      if (typeof formValue === 'string') {
+                        // Display the string value directly as it's being typed or if it's an unparsed value
+                        return formValue;
+                      }
+                      return ''; 
+                    })()
                   }
-                }}
-                onBlur={(e) => {
-                  // On blur, ensure the underlying value is a number if valid
-                  const rawValue = e.target.value.replace(/,/g, '');
-                  if (!isNaN(Number(rawValue))) {
-                    field.onChange(Number(rawValue));
-                  } else {
-                     field.onChange(rawValue); // Keep invalid string for Zod to catch
-                  }
-                }}
-                // Value needs to be formatted for display, but react-hook-form needs a number or parsable string
-                value={typeof field.value === 'number' ? field.value.toLocaleString('fa-IR').replace(/\./g, ',') : field.value || ''}
                  />
               </FormControl>
               <FormMessage />
@@ -96,7 +143,10 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
         />
         <div className="flex justify-end space-x-3 space-x-reverse">
           {onClose && (
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={() => {
+              onClose();
+              form.reset({ title: '', amount: undefined }); // Also reset form on explicit cancel
+            }}>
               لغو
             </Button>
           )}
