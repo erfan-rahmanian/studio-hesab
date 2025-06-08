@@ -110,7 +110,7 @@ export default function HesabdariPage() {
             <Logo className="h-10 w-10 text-primary mb-2 sm:mb-0" />
             <h1 className="text-3xl font-serif font-bold text-primary text-center">یادداشت مالی</h1>
           </div>
-          <Button onClick={handleAddTransaction} variant="default">
+          <Button onClick={handleAddTransaction} variant="default" className="font-sans">
             <PlusCircle className="ml-2 h-5 w-5" />
             افزودن یادداشت جدید
           </Button>
@@ -122,7 +122,7 @@ export default function HesabdariPage() {
               <CardTitle className="font-serif font-bold text-center">جمع کل مبالغ</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-center">{formatCurrency(totalAmount)}</p>
+              <p className="text-2xl font-bold text-center font-sans">{formatCurrency(totalAmount)}</p>
             </CardContent>
           </Card>
           <Card>
@@ -130,7 +130,7 @@ export default function HesabdariPage() {
               <CardTitle className="font-serif font-bold text-center">۸٪ از جمع کل</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-center">{formatCurrency(percentageAmount)}</p>
+              <p className="text-2xl font-bold text-center font-sans">{formatCurrency(percentageAmount)}</p>
             </CardContent>
           </Card>
         </section>
@@ -139,28 +139,28 @@ export default function HesabdariPage() {
           <Card>
             <CardHeader>
               <CardTitle className="font-serif font-bold text-center">لیست تراکنش‌ها</CardTitle>
-              <CardDescription className="text-center">تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
+              <CardDescription className="text-center font-sans">تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
             </CardHeader>
             <CardContent>
               {transactions.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">هیچ یادداشتی ثبت نشده است.</p>
+                <p className="text-center text-muted-foreground py-8 font-sans">هیچ یادداشتی ثبت نشده است.</p>
               ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-center">عنوان</TableHead>
-                      <TableHead className="text-center">مبلغ</TableHead>
-                      <TableHead className="text-center">تاریخ</TableHead>
-                      <TableHead className="text-center">عملیات</TableHead>
+                      <TableHead className="text-center font-sans font-medium">عنوان</TableHead>
+                      <TableHead className="text-center font-sans font-medium">مبلغ</TableHead>
+                      <TableHead className="text-center font-sans font-medium">تاریخ</TableHead>
+                      <TableHead className="text-center font-sans font-medium">عملیات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {transactions.map(transaction => (
                       <TableRow key={transaction.id}>
-                        <TableCell className="font-medium text-center">{transaction.title}</TableCell>
-                        <TableCell className="text-center">{formatCurrency(transaction.amount)}</TableCell>
-                        <TableCell className="text-center">{formatDate(transaction.date)}</TableCell>
+                        <TableCell className="font-sans font-medium text-center">{transaction.title}</TableCell>
+                        <TableCell className="font-sans text-center">{formatCurrency(transaction.amount)}</TableCell>
+                        <TableCell className="font-sans text-center">{formatDate(transaction.date)}</TableCell>
                         <TableCell className="space-x-2 space-x-reverse text-center">
                           <Button variant="ghost" size="icon" onClick={() => handleEditTransaction(transaction)} aria-label="ویرایش">
                             <Edit className="h-4 w-4" />
@@ -174,13 +174,13 @@ export default function HesabdariPage() {
                             <AlertDialogContent dir="rtl">
                               <AlertDialogHeader>
                                 <AlertDialogTitle className="font-serif font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogDescription className="font-sans">
                                   این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel>لغو</AlertDialogCancel>
-                                <AlertDialogAction onClick={() => handleDeleteTransaction(transaction.id)} className="bg-destructive hover:bg-destructive/90">
+                                <AlertDialogCancel className="font-sans">لغو</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteTransaction(transaction.id)} className="bg-destructive hover:bg-destructive/90 font-sans">
                                   بله، حذف کن
                                 </AlertDialogAction>
                               </AlertDialogFooter>

@@ -1,3 +1,4 @@
+
 "use client";
 
 import type * as React from 'react';
@@ -32,7 +33,7 @@ export function TransactionDialog({ isOpen, onOpenChange, onSubmit, initialData,
           <DialogTitle className="font-serif font-bold">
             {mode === 'add' ? 'افزودن یادداشت جدید' : 'ویرایش یادداشت'}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="font-sans">
             {mode === 'add' ? 'اطلاعات تراکنش جدید را وارد کنید.' : 'اطلاعات تراکنش را ویرایش کنید.'}
           </DialogDescription>
         </DialogHeader>
