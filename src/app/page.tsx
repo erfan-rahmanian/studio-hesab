@@ -149,10 +149,10 @@ export default function HesabdariPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-right">عنوان</TableHead>
-                      <TableHead className="text-right">مبلغ</TableHead>
-                      <TableHead className="text-right">تاریخ</TableHead>
-                      <TableHead className="text-right">عملیات</TableHead>
+                      <TableHead className="text-center">عنوان</TableHead>
+                      <TableHead className="text-center">مبلغ</TableHead>
+                      <TableHead className="text-center">تاریخ</TableHead>
+                      <TableHead className="text-center">عملیات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
