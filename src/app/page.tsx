@@ -103,98 +103,100 @@ export default function HesabdariPage() {
   }, [totalAmount]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 md:p-8" dir="rtl">
-      <header className="flex flex-col sm:flex-row justify-between items-center mb-8">
-        <div className="flex items-center space-x-3 space-x-reverse mb-4 sm:mb-0">
-          <Logo className="h-10 w-10 text-primary" />
-          <h1 className="text-3xl font-serif font-bold text-primary">یادداشت مالی</h1>
-        </div>
-        <Button onClick={handleAddTransaction} variant="default">
-          <PlusCircle className="ml-2 h-5 w-5" />
-          افزودن یادداشت جدید
-        </Button>
-      </header>
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-8 flex flex-col items-center" dir="rtl">
+      <div className="w-full max-w-5xl">
+        <header className="flex flex-col sm:flex-row justify-between items-center mb-8">
+          <div className="flex items-center space-x-3 space-x-reverse mb-4 sm:mb-0">
+            <Logo className="h-10 w-10 text-primary" />
+            <h1 className="text-3xl font-serif font-bold text-primary">یادداشت مالی</h1>
+          </div>
+          <Button onClick={handleAddTransaction} variant="default">
+            <PlusCircle className="ml-2 h-5 w-5" />
+            افزودن یادداشت جدید
+          </Button>
+        </header>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-serif font-bold">جمع کل مبالغ</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(totalAmount)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-serif font-bold">۸٪ از جمع کل</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{formatCurrency(percentageAmount)}</p>
-          </CardContent>
-        </Card>
-      </section>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-serif font-bold">جمع کل مبالغ</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">{formatCurrency(totalAmount)}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-serif font-bold">۸٪ از جمع کل</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">{formatCurrency(percentageAmount)}</p>
+            </CardContent>
+          </Card>
+        </section>
 
-      <section>
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-serif font-bold">لیست تراکنش‌ها</CardTitle>
-            <CardDescription>تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {transactions.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">هیچ یادداشتی ثبت نشده است.</p>
-            ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-right">عنوان</TableHead>
-                    <TableHead className="text-right">مبلغ</TableHead>
-                    <TableHead className="text-right">تاریخ</TableHead>
-                    <TableHead className="text-right">عملیات</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {transactions.map(transaction => (
-                    <TableRow key={transaction.id}>
-                      <TableCell className="font-medium">{transaction.title}</TableCell>
-                      <TableCell>{formatCurrency(transaction.amount)}</TableCell>
-                      <TableCell>{formatDate(transaction.date)}</TableCell>
-                      <TableCell className="space-x-2 space-x-reverse">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditTransaction(transaction)} aria-label="ویرایش">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" aria-label="حذف">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent dir="rtl">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle className="font-serif font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>لغو</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => handleDeleteTransaction(transaction.id)} className="bg-destructive hover:bg-destructive/90">
-                                بله، حذف کن
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </TableCell>
+        <section>
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-serif font-bold">لیست تراکنش‌ها</CardTitle>
+              <CardDescription>تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {transactions.length === 0 ? (
+                <p className="text-center text-muted-foreground py-8">هیچ یادداشتی ثبت نشده است.</p>
+              ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-right">عنوان</TableHead>
+                      <TableHead className="text-right">مبلغ</TableHead>
+                      <TableHead className="text-right">تاریخ</TableHead>
+                      <TableHead className="text-right">عملیات</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            )}
-          </CardContent>
-        </Card>
-      </section>
+                  </TableHeader>
+                  <TableBody>
+                    {transactions.map(transaction => (
+                      <TableRow key={transaction.id}>
+                        <TableCell className="font-medium">{transaction.title}</TableCell>
+                        <TableCell>{formatCurrency(transaction.amount)}</TableCell>
+                        <TableCell>{formatDate(transaction.date)}</TableCell>
+                        <TableCell className="space-x-2 space-x-reverse">
+                          <Button variant="ghost" size="icon" onClick={() => handleEditTransaction(transaction)} aria-label="ویرایش">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" aria-label="حذف">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent dir="rtl">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="font-serif font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>لغو</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDeleteTransaction(transaction.id)} className="bg-destructive hover:bg-destructive/90">
+                                  بله، حذف کن
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+      </div>
 
       <TransactionDialog
         isOpen={isDialogOpen}
