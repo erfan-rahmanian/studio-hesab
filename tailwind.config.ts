@@ -94,9 +94,6 @@ export default {
       sans: ['Vazirmatn', ...defaultTheme.fontFamily.sans],
       serif: ['Alegreya', ...defaultTheme.fontFamily.serif],
       mono: ['monospace', ...defaultTheme.fontFamily.mono],
-      // Custom utilities, now equivalent to sans and serif
-      body: ['Vazirmatn', ...defaultTheme.fontFamily.sans],
-      headline: ['Alegreya', ...defaultTheme.fontFamily.serif],
     },
   },
   plugins: [require('tailwindcss-animate')],
