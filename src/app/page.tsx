@@ -158,10 +158,10 @@ export default function HesabdariPage() {
                   <TableBody>
                     {transactions.map(transaction => (
                       <TableRow key={transaction.id}>
-                        <TableCell className="font-medium">{transaction.title}</TableCell>
-                        <TableCell>{formatCurrency(transaction.amount)}</TableCell>
-                        <TableCell>{formatDate(transaction.date)}</TableCell>
-                        <TableCell className="space-x-2 space-x-reverse">
+                        <TableCell className="font-medium text-center">{transaction.title}</TableCell>
+                        <TableCell className="text-center">{formatCurrency(transaction.amount)}</TableCell>
+                        <TableCell className="text-center">{formatDate(transaction.date)}</TableCell>
+                        <TableCell className="space-x-2 space-x-reverse text-center">
                           <Button variant="ghost" size="icon" onClick={() => handleEditTransaction(transaction)} aria-label="ویرایش">
                             <Edit className="h-4 w-4" />
                           </Button>
