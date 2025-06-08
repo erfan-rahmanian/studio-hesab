@@ -105,7 +105,7 @@ export default function HesabdariPage() {
       <header className="flex flex-col sm:flex-row justify-between items-center mb-8">
         <div className="flex items-center space-x-3 space-x-reverse mb-4 sm:mb-0">
           <Logo className="h-10 w-10 text-primary" />
-          <h1 className="text-3xl font-headline font-bold text-primary">یادداشت مالی</h1>
+          <h1 className="text-3xl font-serif font-bold text-primary">یادداشت مالی</h1>
         </div>
         <Button onClick={handleAddTransaction} variant="default">
           <PlusCircle className="ml-2 h-5 w-5" />
@@ -116,7 +116,7 @@ export default function HesabdariPage() {
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline font-bold">جمع کل مبالغ</CardTitle>
+            <CardTitle className="font-serif font-bold">جمع کل مبالغ</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(totalAmount)}</p>
@@ -124,7 +124,7 @@ export default function HesabdariPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline font-bold">۸٪ از جمع کل</CardTitle>
+            <CardTitle className="font-serif font-bold">۸٪ از جمع کل</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(percentageAmount)}</p>
@@ -135,7 +135,7 @@ export default function HesabdariPage() {
       <section>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline font-bold">لیست تراکنش‌ها</CardTitle>
+            <CardTitle className="font-serif font-bold">لیست تراکنش‌ها</CardTitle>
             <CardDescription>تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -170,7 +170,7 @@ export default function HesabdariPage() {
                           </AlertDialogTrigger>
                           <AlertDialogContent dir="rtl">
                             <AlertDialogHeader>
-                              <AlertDialogTitle className="font-headline">آیا مطمئن هستید؟</AlertDialogTitle>
+                              <AlertDialogTitle className="font-serif">آیا مطمئن هستید؟</AlertDialogTitle>
                               <AlertDialogDescription>
                                 این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
                               </AlertDialogDescription>

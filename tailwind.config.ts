@@ -1,4 +1,5 @@
 import type {Config} from 'tailwindcss';
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
   darkMode: ['class'],
@@ -9,11 +10,6 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        body: ['Vazirmatn', 'sans-serif'],
-        headline: ['Alegreya', 'serif'],
-        code: ['monospace'],
-      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -93,6 +89,14 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+    },
+    fontFamily: {
+      sans: ['Vazirmatn', ...defaultTheme.fontFamily.sans],
+      serif: ['Alegreya', ...defaultTheme.fontFamily.serif],
+      mono: ['monospace', ...defaultTheme.fontFamily.mono],
+      // Custom utilities, now equivalent to sans and serif
+      body: ['Vazirmatn', ...defaultTheme.fontFamily.sans],
+      headline: ['Alegreya', ...defaultTheme.fontFamily.serif],
     },
   },
   plugins: [require('tailwindcss-animate')],
