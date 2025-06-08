@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -22,7 +23,6 @@ export default function HesabdariPage() {
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const { toast } = useToast();
 
-  // Load transactions from local storage on initial render
   useEffect(() => {
     const storedTransactions = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (storedTransactions) {
@@ -30,12 +30,11 @@ export default function HesabdariPage() {
         setTransactions(JSON.parse(storedTransactions));
       } catch (error) {
         console.error("Failed to parse transactions from local storage:", error);
-        localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear corrupted data
+        localStorage.removeItem(LOCAL_STORAGE_KEY); 
       }
     }
   }, []);
 
-  // Save transactions to local storage whenever they change
   useEffect(() => {
     if (transactions.length > 0 || localStorage.getItem(LOCAL_STORAGE_KEY)) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(transactions));
@@ -64,11 +63,14 @@ export default function HesabdariPage() {
   };
 
   const handleFormSubmit = (data: TransactionFormData) => {
+    const transactionDateISO = data.date.toISOString();
+
     if (dialogMode === 'add') {
       const newTransaction: Transaction = {
-        id: Date.now().toString(), // Simple unique ID
-        ...data,
-        date: new Date().toISOString(),
+        id: Date.now().toString(), 
+        title: data.title,
+        amount: data.amount,
+        date: transactionDateISO,
       };
       setTransactions(prev => [newTransaction, ...prev]);
       toast({
@@ -79,7 +81,7 @@ export default function HesabdariPage() {
     } else if (editingTransaction) {
       setTransactions(prev =>
         prev.map(t =>
-          t.id === editingTransaction.id ? { ...t, ...data, date: t.date } : t
+          t.id === editingTransaction.id ? { ...editingTransaction, ...data, date: transactionDateISO } : t
         )
       );
       toast({
@@ -170,7 +172,7 @@ export default function HesabdariPage() {
                           </AlertDialogTrigger>
                           <AlertDialogContent dir="rtl">
                             <AlertDialogHeader>
-                              <AlertDialogTitle className="font-serif">آیا مطمئن هستید؟</AlertDialogTitle>
+                              <AlertDialogTitle className="font-serif font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
                               <AlertDialogDescription>
                                 این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
                               </AlertDialogDescription>
