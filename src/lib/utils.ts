@@ -10,11 +10,20 @@ export function formatCurrency(amount: number): string {
 }
 
 export function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString('fa-IR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  try {
+    const date = new Date(dateString);
+    // Using Intl.DateTimeFormat with 'fa-IR' locale and 'persian' calendar
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      calendar: 'persian',
+    }).format(date);
+  } catch (error) {
+    console.error("Error formatting date to Persian calendar:", error);
+    // Fallback to default locale formatting if an error occurs
+    return new Date(dateString).toLocaleDateString('fa-IR');
+  }
 }
 
 export function toWesternNumerals(str: string): string {
