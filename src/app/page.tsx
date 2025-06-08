@@ -108,7 +108,7 @@ export default function HesabdariPage() {
         <header className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex flex-col items-center sm:flex-row space-x-0 sm:space-x-3 sm:space-x-reverse mb-4 sm:mb-0">
             <Logo className="h-10 w-10 text-primary mb-2 sm:mb-0" />
-            <h1 className="text-3xl font-serif font-bold text-primary text-center">یادداشت مالی</h1>
+            <h1 className="text-3xl font-sans font-bold text-primary text-center">یادداشت مالی</h1>
           </div>
           <Button onClick={handleAddTransaction} variant="default" className="font-sans">
             <PlusCircle className="ml-2 h-5 w-5" />
@@ -119,7 +119,7 @@ export default function HesabdariPage() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif font-bold text-center">جمع کل مبالغ</CardTitle>
+              <CardTitle className="font-sans font-bold text-center">جمع کل مبالغ</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold text-center font-sans">{formatCurrency(totalAmount)}</p>
@@ -127,7 +127,7 @@ export default function HesabdariPage() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif font-bold text-center">۸٪ از جمع کل</CardTitle>
+              <CardTitle className="font-sans font-bold text-center">۸٪ از جمع کل</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-2xl font-bold text-center font-sans">{formatCurrency(percentageAmount)}</p>
@@ -138,7 +138,7 @@ export default function HesabdariPage() {
         <section>
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif font-bold text-center">لیست تراکنش‌ها</CardTitle>
+              <CardTitle className="font-sans font-bold text-center">لیست تراکنش‌ها</CardTitle>
               <CardDescription className="text-center font-sans">تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -158,7 +158,7 @@ export default function HesabdariPage() {
                   <TableBody>
                     {transactions.map(transaction => (
                       <TableRow key={transaction.id}>
-                        <TableCell className="font-sans font-medium text-center">{transaction.title}</TableCell>
+                        <TableCell className="font-sans text-center font-medium">{transaction.title}</TableCell>
                         <TableCell className="font-sans text-center">{formatCurrency(transaction.amount)}</TableCell>
                         <TableCell className="font-sans text-center">{formatDate(transaction.date)}</TableCell>
                         <TableCell className="space-x-2 space-x-reverse text-center">
@@ -173,7 +173,7 @@ export default function HesabdariPage() {
                             </AlertDialogTrigger>
                             <AlertDialogContent dir="rtl">
                               <AlertDialogHeader>
-                                <AlertDialogTitle className="font-serif font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
+                                <AlertDialogTitle className="font-sans font-bold">آیا مطمئن هستید؟</AlertDialogTitle>
                                 <AlertDialogDescription className="font-sans">
                                   این عمل قابل بازگشت نیست. این یادداشت برای همیشه حذف خواهد شد.
                                 </AlertDialogDescription>
