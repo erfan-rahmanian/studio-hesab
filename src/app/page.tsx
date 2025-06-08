@@ -10,7 +10,7 @@ import { TransactionDialog } from '@/components/TransactionDialog';
 import type { TransactionFormData } from '@/components/TransactionForm';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import type { Transaction } from '@/types';
-import { Logo } from '@/components/icons'; // Assuming you've created this
+import { Logo } from '@/components/icons';
 import { useToast } from "@/hooks/use-toast";
 
 const LOCAL_STORAGE_KEY = 'hesabdari_transactions';
@@ -37,8 +37,6 @@ export default function HesabdariPage() {
 
   // Save transactions to local storage whenever they change
   useEffect(() => {
-    // Check if transactions state is initialized to prevent overwriting on first load with empty array
-    // if transactions is not empty, or if it is empty but local storage already has the key (meaning user deleted all items)
     if (transactions.length > 0 || localStorage.getItem(LOCAL_STORAGE_KEY)) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(transactions));
     }
@@ -118,7 +116,7 @@ export default function HesabdariPage() {
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">جمع کل مبالغ</CardTitle>
+            <CardTitle className="font-headline font-bold">جمع کل مبالغ</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(totalAmount)}</p>
@@ -126,7 +124,7 @@ export default function HesabdariPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">۸٪ از جمع کل</CardTitle>
+            <CardTitle className="font-headline font-bold">۸٪ از جمع کل</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">{formatCurrency(percentageAmount)}</p>
@@ -137,7 +135,7 @@ export default function HesabdariPage() {
       <section>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline">لیست تراکنش‌ها</CardTitle>
+            <CardTitle className="font-headline font-bold">لیست تراکنش‌ها</CardTitle>
             <CardDescription>تراکنش‌های مالی خود را مدیریت کنید.</CardDescription>
           </CardHeader>
           <CardContent>

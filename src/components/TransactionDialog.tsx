@@ -29,7 +29,7 @@ export function TransactionDialog({ isOpen, onOpenChange, onSubmit, initialData,
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="font-headline">
+          <DialogTitle className="font-headline font-bold">
             {mode === 'add' ? 'افزودن یادداشت جدید' : 'ویرایش یادداشت'}
           </DialogTitle>
           <DialogDescription>
