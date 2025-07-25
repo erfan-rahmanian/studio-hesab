@@ -130,7 +130,7 @@ export default function HesabdariPage() {
   }, [totalAmount]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 md:p-8 flex flex-col items-center shadow-lg" dir="rtl">
+    <div className="min-h-screen bg-background text-foreground p-4 md:p-8 flex flex-col items-center shadow-lg background-pattern" dir="rtl">
       <div className="w-full max-w-5xl bg-card rounded-lg p-6 shadow-md">
         <header className="flex flex-col sm:flex-row justify-between items-center mb-6 border-b border-border pb-6">
           <div className="flex flex-col items-center sm:flex-row space-x-0 sm:space-x-3 sm:space-x-reverse mb-4 sm:mb-0">
