@@ -19,6 +19,7 @@ import {
 import { DatePicker } from '@/components/ui/date-picker';
 import type { Transaction } from '@/types';
 import { toWesternNumerals } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const transactionFormSchema = z.object({
   title: z.string().min(1, { message: 'عنوان نمی‌تواند خالی باشد.' }),
@@ -41,6 +42,7 @@ const transactionFormSchema = z.object({
   ),
   date: z.date({ required_error: 'تاریخ نمی‌تواند خالی باشد.' }),
   category: z.string().min(1, { message: 'دسته بندی نمی‌تواند خالی باشد.' }), // Added for category
+  type: z.enum(['income', 'expense'], { required_error: 'نوع تراکنش نمی‌تواند خالی باشد.' }), // Added for transaction type
 });
 
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;
@@ -59,6 +61,7 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
       amount: initialData?.amount || undefined,
       date: initialData?.date ? new Date(initialData.date) : new Date(),
       category: initialData?.category || '', // Added default for category
+      type: initialData?.type || 'expense', // Default to expense
     },
   });
 
@@ -69,6 +72,7 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
         amount: initialData.amount || undefined,
         date: initialData.date ? new Date(initialData.date) : new Date(),
         category: initialData.category || '', // Added reset for category
+        type: initialData.type || 'expense', // Added reset for type
       });
     } else {
       form.reset({
@@ -76,13 +80,14 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
         amount: undefined,
         date: new Date(),
         category: '', // Added reset for category
+        type: 'expense', // Default to expense
       });
     }
   }, [initialData, form]);
 
   const handleSubmit = (data: TransactionFormData) => {
     onSubmit(data);
-    form.reset({ title: '', amount: undefined, date: new Date(), category: '' }); // Added reset for category
+    form.reset({ title: '', amount: undefined, date: new Date(), category: '', type: 'expense' }); // Added reset for category and type
   };
 
   return (
@@ -185,11 +190,33 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
             </FormItem>
           )}
         />
+        {/* Type Field */}
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>نوع تراکنش</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="نوع تراکنش را انتخاب کنید" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="income">بستانکار (درآمد)</SelectItem>
+                  <SelectItem value="expense">طلبکار (هزینه)</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end space-x-3 space-x-reverse">
           {onClose && (
             <Button type="button" variant="outline" onClick={() => {
               onClose();
-              form.reset({ title: '', amount: undefined, date: new Date(), category: '' }); 
+              form.reset({ title: '', amount: undefined, date: new Date(), category: '', type: 'expense' }); 
             }}>
               لغو
             </Button>

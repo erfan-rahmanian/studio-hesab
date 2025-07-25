@@ -82,6 +82,7 @@ export default function HesabdariPage() {
         amount: data.amount,
         date: transactionDateISO,
         category: data.category, // Added category
+        type: data.type, // Added type
       };
       setTransactions(prev => [newTransaction, ...prev]);
       toast({
@@ -92,7 +93,7 @@ export default function HesabdariPage() {
     } else if (editingTransaction) {
       setTransactions(prev =>
         prev.map(t =>
-          t.id === editingTransaction.id ? { ...editingTransaction, ...data, date: transactionDateISO } : t
+          t.id === editingTransaction.id ? { ...editingTransaction, ...data, date: transactionDateISO, type: data.type } : t
         )
       );
       toast({
@@ -119,15 +120,20 @@ export default function HesabdariPage() {
   }, [transactions, searchTitle, filterCategory]);
 
 
-  const totalAmount = useMemo(() => {
-    // Use filteredTransactions for total amount calculation if filtering is active
+  const totalIncome = useMemo(() => {
     const relevantTransactions = filteredTransactions.length > 0 ? filteredTransactions : transactions;
-    return relevantTransactions.reduce((sum, t) => sum + t.amount, 0);
+    return relevantTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
   }, [transactions, filteredTransactions]);
 
-  const percentageAmount = useMemo(() => {
-    return totalAmount * 0.08;
-  }, [totalAmount]);
+  const totalExpense = useMemo(() => {
+    const relevantTransactions = filteredTransactions.length > 0 ? filteredTransactions : transactions;
+    return relevantTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+  }, [transactions, filteredTransactions]);
+
+  const netBalance = useMemo(() => {
+    return totalIncome - totalExpense;
+  }, [totalIncome, totalExpense]);
+
 
   return (
     <div className="min-h-screen bg-background text-foreground p-4 md:p-8 flex flex-col items-center shadow-lg background-pattern" dir="rtl">
@@ -146,18 +152,26 @@ export default function HesabdariPage() {
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <Card>
             <CardHeader>
-              <CardTitle className="font-sans font-semibold text-center">جمع کل مبالغ</CardTitle>
+              <CardTitle className="font-sans font-semibold text-center">جمع کل درآمد (بستانکار)</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-semibold text-center font-sans">{formatCurrency(totalAmount)}</p>
+              <p className="text-2xl font-semibold text-center font-sans text-green-600">{formatCurrency(totalIncome)}</p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle className="font-sans font-semibold text-center">۸٪ از جمع کل</CardTitle>
+              <CardTitle className="font-sans font-semibold text-center">جمع کل هزینه (طلبکار)</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-semibold text-center font-sans">{formatCurrency(percentageAmount)}</p>
+              <p className="text-2xl font-semibold text-center font-sans text-red-600">{formatCurrency(totalExpense)}</p>
+            </CardContent>
+          </Card>
+          <Card className="md:col-span-2">
+            <CardHeader>
+              <CardTitle className="font-sans font-semibold text-center">مانده خالص</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className={`text-2xl font-semibold text-center font-sans ${netBalance >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatCurrency(netBalance)}</p>
             </CardContent>
           </Card>
         </section>
@@ -260,17 +274,21 @@ export default function HesabdariPage() {
                       <TableHead className="text-center font-sans font-medium">عنوان</TableHead>
                       <TableHead className="text-center font-sans font-medium">مبلغ</TableHead>
                       <TableHead className="text-center font-sans font-medium">تاریخ</TableHead>
-                      <TableHead className="text-center font-sans font-medium">دسته بندی</TableHead> {/* Added Category Header */}
+                      <TableHead className="text-center font-sans font-medium">دسته بندی</TableHead>
+                      <TableHead className="text-center font-sans font-medium">نوع</TableHead> {/* Added Type Header */}
                       <TableHead className="text-center font-sans font-medium">عملیات</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredTransactions.map(transaction => ( // Use filteredTransactions here
+                    {filteredTransactions.map(transaction => (
                       <TableRow key={transaction.id}>
                         <TableCell className="font-sans text-center font-medium">{transaction.title}</TableCell>
                         <TableCell className="font-sans text-center">{formatCurrency(transaction.amount)}</TableCell>
                         <TableCell className="font-sans text-center">{formatDate(transaction.date)}</TableCell>
-                        <TableCell className="font-sans text-center">{transaction.category}</TableCell> {/* Added Category Cell */}
+                        <TableCell className="font-sans text-center">{transaction.category}</TableCell>
+                        <TableCell className={`font-sans text-center ${transaction.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                          {transaction.type === 'income' ? 'بستانکار' : 'طلبکار'}
+                        </TableCell>
                         <TableCell className="space-x-2 space-x-reverse text-center">
                           <Button variant="ghost" size="icon" onClick={() => handleEditTransaction(transaction)} aria-label="ویرایش">
                             <Edit className="h-4 w-4" />
