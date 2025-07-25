@@ -178,7 +178,7 @@ export default function HesabdariPage() {
                     placeholder="عنوان تراکنش"
                     value={searchTitle}
                     onChange={(e) => setSearchTitle(e.target.value)}
-                    className="pr-10" // Add padding to the right for the icon
+                    className="pr-10 input-custom" // Add padding to the right for the icon and custom class
                   />
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 </div>
@@ -208,6 +208,7 @@ export default function HesabdariPage() {
                   onChange={setStartDate}
                   placeholder="تاریخ شروع"
                   className="w-full"
+                  buttonClassName="date-picker-custom-button"
                 />
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -217,6 +218,7 @@ export default function HesabdariPage() {
                   onChange={setEndDate}
                   placeholder="تاریخ پایان"
                   className="w-full"
+                  buttonClassName="date-picker-custom-button"
                 />
               </div>
               <div className="flex items-end">
