@@ -40,6 +40,7 @@ const transactionFormSchema = z.object({
      .positive({ message: 'مبلغ باید مثبت باشد.' })
   ),
   date: z.date({ required_error: 'تاریخ نمی‌تواند خالی باشد.' }),
+  category: z.string().min(1, { message: 'دسته بندی نمی‌تواند خالی باشد.' }), // Added for category
 });
 
 export type TransactionFormData = z.infer<typeof transactionFormSchema>;
@@ -57,6 +58,7 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
       title: initialData?.title || '',
       amount: initialData?.amount || undefined,
       date: initialData?.date ? new Date(initialData.date) : new Date(),
+      category: initialData?.category || '', // Added default for category
     },
   });
 
@@ -66,19 +68,21 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
         title: initialData.title || '',
         amount: initialData.amount || undefined,
         date: initialData.date ? new Date(initialData.date) : new Date(),
+        category: initialData.category || '', // Added reset for category
       });
     } else {
       form.reset({
         title: '',
         amount: undefined,
         date: new Date(),
+        category: '', // Added reset for category
       });
     }
   }, [initialData, form]);
 
   const handleSubmit = (data: TransactionFormData) => {
     onSubmit(data);
-    form.reset({ title: '', amount: undefined, date: new Date() }); 
+    form.reset({ title: '', amount: undefined, date: new Date(), category: '' }); // Added reset for category
   };
 
   return (
@@ -167,11 +171,25 @@ export function TransactionForm({ onSubmit, initialData, onClose }: TransactionF
             </FormItem>
           )}
         />
+        {/* Category Field */}
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>دسته بندی</FormLabel>
+              <FormControl>
+                <Input placeholder="مثال: درآمد، هزینه، اجاره" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end space-x-3 space-x-reverse">
           {onClose && (
             <Button type="button" variant="outline" onClick={() => {
               onClose();
-              form.reset({ title: '', amount: undefined, date: new Date() }); 
+              form.reset({ title: '', amount: undefined, date: new Date(), category: '' }); 
             }}>
               لغو
             </Button>
